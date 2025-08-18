@@ -1,6 +1,6 @@
 "use server"
 
-import { findGuest, updateGuest } from "@/lib/guests"
+import { findGuest, updateGuest } from "@/lib/database"
 import { sendRSVPConfirmation } from "@/lib/email"
 
 export interface RSVPFormData {
@@ -15,44 +15,52 @@ export interface RSVPFormData {
 }
 
 export async function checkGuest(firstName: string, lastName: string) {
-  const guest = findGuest(firstName, lastName)
+  try {
+    const guest = await findGuest(firstName, lastName)
 
-  if (!guest) {
+    if (!guest) {
+      return {
+        success: false,
+        error: "Guest not found. Please check the spelling of your name or contact the couple.",
+      }
+    }
+
+    if (guest.has_responded) {
+      return {
+        success: false,
+        error: "You have already submitted your RSVP. If you need to make changes, please contact the couple directly.",
+      }
+    }
+
+    return {
+      success: true,
+      guest: {
+        id: guest.id,
+        firstName: guest.first_name,
+        lastName: guest.last_name,
+        allowsPlusOne: guest.allows_plus_one,
+      },
+    }
+  } catch (error) {
+    console.error("Error checking guest:", error)
     return {
       success: false,
-      error: "Guest not found. Please check the spelling of your name or contact the couple.",
+      error: "An error occurred while checking your invitation. Please try again.",
     }
-  }
-
-  if (guest.hasResponded) {
-    return {
-      success: false,
-      error: "You have already submitted your RSVP. If you need to make changes, please contact the couple directly.",
-    }
-  }
-
-  return {
-    success: true,
-    guest: {
-      id: guest.id,
-      firstName: guest.firstName,
-      lastName: guest.lastName,
-      allowsPlusOne: guest.allowsPlusOne,
-    },
   }
 }
 
 export async function submitRSVP(data: RSVPFormData & { guestId: string }) {
   try {
     // Update guest in database
-    const updateSuccess = updateGuest(data.guestId, {
+    const updateSuccess = await updateGuest(data.guestId, {
       email: data.email,
-      isAttending: data.isAttending,
-      plusOneName: data.hasPlusOne ? data.plusOneName : undefined,
-      dietaryRestrictions: data.dietaryRestrictions,
-      specialMessage: data.specialMessage,
-      hasResponded: true,
-      responseDate: new Date(),
+      is_attending: data.isAttending,
+      plus_one_name: data.hasPlusOne ? data.plusOneName : null,
+      dietary_restrictions: data.dietaryRestrictions || null,
+      special_message: data.specialMessage || null,
+      has_responded: true,
+      response_date: new Date().toISOString(),
     })
 
     if (!updateSuccess) {
