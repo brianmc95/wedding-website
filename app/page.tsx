@@ -1,10 +1,13 @@
 import { Heart, MapPin, Clock, Calendar, Camera, Mail, Phone } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { RSVPForm } from "@/components/rsvp-form"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Gallery } from "@/components/gallery"
 import { getGalleryImages } from "@/lib/gallery"
@@ -242,7 +245,77 @@ export default function WeddingWebsite() {
             </p>
           </div>
 
-          <RSVPForm />
+          <Card className="border-orange-200">
+            <CardContent className="p-8">
+              <form className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input id="firstName" placeholder="Your first name" />
+                  </div>
+                  <div>
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input id="lastName" placeholder="Your last name" />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input id="email" type="email" placeholder="your.email@example.com" />
+                </div>
+
+                <div>
+                  <Label htmlFor="attendance">Will you be attending?</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Please select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="yes">Yes, I'll be there!</SelectItem>
+                      <SelectItem value="no">Sorry, can't make it</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="guests">Number of Guests</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Including yourself" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1 Guest</SelectItem>
+                      <SelectItem value="2">2 Guests</SelectItem>
+                      <SelectItem value="3">3 Guests</SelectItem>
+                      <SelectItem value="4">4 Guests</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="dietary">Dietary Restrictions</Label>
+                  <Textarea
+                    id="dietary"
+                    placeholder="Please let us know about any dietary restrictions or allergies"
+                    rows={3}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="message">Special Message</Label>
+                  <Textarea
+                    id="message"
+                    placeholder="Share your excitement or any special message for the couple!"
+                    rows={3}
+                  />
+                </div>
+
+                <Button type="submit" className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3">
+                  Send RSVP
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
