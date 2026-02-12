@@ -91,7 +91,7 @@ export default function WeddingWebsite() {
               <div>
                 <h3 className="font-serif text-2xl text-amber-800 mb-3">How We Met</h3>
                 <p className="text-gray-700 leading-relaxed">
-                  We met through the "Woodies crew" during RAG Week at UCC in 2019. Neither of us are party animals, so
+                  We met through the "Woodies crew" during RAG Week at UCC in 2016. Neither of us are party animals, so
                   it feels serendipitous that we both went out that night on a whim. After some friendly competition for
                   Megan's attention, Brian won out, and we ended up talking until the early hours in Kate Hickey's
                   kitchen. The next morning, Megan made the first move and added Brian on Facebook—much to his relief,
